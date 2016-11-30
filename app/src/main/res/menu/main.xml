@@ -14,11 +14,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <string name="app_name_with_index">PdfRendererBasic (%1$d/%2$d)</string>
-    <string name="info">Info</string>
-    <string name="previous">Previous</string>
-    <string name="next">Next</string>
+    <item
+        android:id="@+id/action_info"
+        android:icon="@drawable/ic_action_info"
+        android:showAsAction="always"
+        android:title="@string/info" />
 
-</resources>
+</menu>
