@@ -36,17 +36,25 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEST = "stamp_file.pdf";
     public static final String IMG = "avatar_photo_oval.png";
     private  String PathDirDCIM;
+    public static final String FRAGMENT_PDF_EDITOR = "pdf_editor";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_real);
 
-        /*if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+        if (savedInstanceState == null) {
+           /* getFragmentManager().beginTransaction()
                     .add(R.id.container, new PdfRendererBasicFragment(),
                             FRAGMENT_PDF_RENDERER_BASIC)
+                    .commit();*/
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new PdfEditFragment(),
+                            FRAGMENT_PDF_EDITOR)
                     .commit();
-        }*/
+
+        }
 
         PathDirDCIM = Environment.getExternalStorageDirectory() + "/" + DIR_PDF;
         File dirDCIM = new File(PathDirDCIM);
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
     }
 
 

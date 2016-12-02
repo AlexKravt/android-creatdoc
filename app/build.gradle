@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -32,4 +32,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.itextpdf:itextg:5.5.10'
 
+    compile 'com.github.barteksc:android-pdf-viewer:2.3.0'
 }
