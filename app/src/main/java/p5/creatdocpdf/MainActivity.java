@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                             FRAGMENT_PDF_EDITOR)
                     .commit();
 
-
+        }
 
         PathDirDCIM = Environment.getExternalStorageDirectory() + "/" + DIR_PDF;
         File dirDCIM = new File(PathDirDCIM);
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
     }
 
 
