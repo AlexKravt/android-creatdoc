@@ -20,17 +20,25 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+import java.io.File;
 import java.io.IOException;
+
 
 /**
  * This fragment has a big {@ImageView} that shows PDF pages, and 2 {@link android.widget.Button}s to move between
@@ -39,6 +47,11 @@ import java.io.IOException;
 public class PdfRendererBasicFragment extends Fragment implements View.OnClickListener {
 
     Context context;
+    /** Called when the activity is first created. */
+    Paint mPaint;
+    float Mx1,My1;
+    float x,y;
+
 
     /**
      * Key string for saving the state of current page index.
@@ -82,8 +95,11 @@ public class PdfRendererBasicFragment extends Fragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_pdf_renderer_basic, container, false);
 
+       // view1.setBackgroundResource(R.drawable.image_0031_layer_1);
+       // setContentView(view1);
+
+        return inflater.inflate(R.layout.fragment_pdf_renderer_basic, container, false);
 
     }
 
@@ -93,8 +109,22 @@ public class PdfRendererBasicFragment extends Fragment implements View.OnClickLi
 
         context = view.getContext();
 
+       /* mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(0xFFFF0000);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        // mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(10);*/
+        //MyView MYview =  (MyView) view.findViewById(R.id.myView);
+      //  MYview.setPointStyle(mPaint);
+
         try {
-            openRenderer(context);
+            //String filestorage = Environment.getExternalStorageDirectory().getAbsolutePath().toString();
+            String newpathdir = FileUtils.getNewDir("dirPDF");
+            String filePDF = newpathdir+"/sample.pdf";
+            openRenderer(context, Uri.parse(filePDF).toString());
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "Error! " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -113,7 +143,7 @@ public class PdfRendererBasicFragment extends Fragment implements View.OnClickLi
         if (null != savedInstanceState) {
             index = savedInstanceState.getInt(STATE_CURRENT_PAGE_INDEX, 0);
         }
-        showPage(index);
+        showPage(getPageCount()-1);
     }
 
     @Override
@@ -144,11 +174,31 @@ public class PdfRendererBasicFragment extends Fragment implements View.OnClickLi
      * Sets up a {@link android.graphics.pdf.PdfRenderer} and related resources.
      */
     private void openRenderer(Context context) throws IOException {
+
+
         // In this sample, we read a PDF from the assets directory.
         mFileDescriptor = context.getAssets().openFd("sample.pdf").getParcelFileDescriptor();
         // This is the PdfRenderer we use to render the PDF.
         mPdfRenderer = new PdfRenderer(mFileDescriptor);
     }
+
+
+    private void openRenderer(Context context,String path_file) throws IOException {
+
+       // File file =  FileUtils.fileFromAsset(context, path_file);
+        File file = new File(path_file); //  FileUtils.fileFromCard(context,path_file);
+        if(file.exists())
+        {
+            mFileDescriptor = ParcelFileDescriptor.open(file,ParcelFileDescriptor.MODE_READ_WRITE);
+
+            mPdfRenderer = new PdfRenderer(mFileDescriptor);
+        }
+        else
+        {
+            Toast.makeText(context,"Файл отсутствует",Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     /**
      * Closes the {@link android.graphics.pdf.PdfRenderer} and related resources.
@@ -168,7 +218,11 @@ public class PdfRendererBasicFragment extends Fragment implements View.OnClickLi
      *
      * @param index The page index.
      */
-    private void showPage(int index) {
+    private void showPage(int index)
+    {
+        if(mPdfRenderer==null)
+            return;
+
         if (mPdfRenderer.getPageCount() <= index) {
             return;
         }
@@ -211,6 +265,30 @@ public class PdfRendererBasicFragment extends Fragment implements View.OnClickLi
         return mPdfRenderer.getPageCount();
     }
 
+    private void addPodpis()
+    {
+      /*  try{
+        PDFDocument pdfDoc = new PDFDocument ("doc.pdf", null);
+        PDFPage existingPage = pdfDoc.getPage(0);
+        Graphics2D g2d = existingPage.createGraphics();
+        g2d.setFont(PDFGraphics.COURIER.deriveFont(14f));
+        g2d.drawString ("This is a string", 72, 72);
+        g2d.drawImage (img, 100, 200, null);
+
+        PDFPage newPage = pdfDoc.appendNewPage (8.5 * 72, 11 * 72);
+        g2d = newPage.createGraphics();
+        g2d.drawRect (100, 100, 100, 100);
+        pdfDoc.saveDocument ("doc.pdf");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }*/
+    }
+
+
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -226,5 +304,6 @@ public class PdfRendererBasicFragment extends Fragment implements View.OnClickLi
             }
         }
     }
+
 
 }

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     public static final String FRAGMENT_PDF_RENDERER_BASIC = "pdf_renderer_basic";
+    public static final String FRAGMENT_PDF_EDITOR = "pdf_editor";
 
 
     @Override
@@ -17,10 +18,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_real);
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+           /* getFragmentManager().beginTransaction()
                     .add(R.id.container, new PdfRendererBasicFragment(),
                             FRAGMENT_PDF_RENDERER_BASIC)
+                    .commit();*/
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new PdfEditFragment(),
+                            FRAGMENT_PDF_EDITOR)
                     .commit();
+
         }
     }
 
